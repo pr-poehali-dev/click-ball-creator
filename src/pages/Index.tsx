@@ -5,23 +5,41 @@ import GameStats from "@/components/GameStats";
 const Index = () => {
   const [score, setScore] = useState(0);
   const [ballLifespan, setBallLifespan] = useState(3000); // 3 seconds initially
-  const [upgradeCount, setUpgradeCount] = useState(0);
+  const [ballSizeRange, setBallSizeRange] = useState({ min: 20, max: 50 }); // size range
+  const [lifespanUpgrades, setLifespanUpgrades] = useState(0);
+  const [sizeUpgrades, setSizeUpgrades] = useState(0);
 
-  const upgradeCost = (upgradeCount + 1) * 100;
-  const canUpgrade = score >= upgradeCost;
+  const lifespanUpgradeCost = (lifespanUpgrades + 1) * 100;
+  const sizeUpgradeCost = (sizeUpgrades + 1) * 150;
+
+  const canUpgradeLifespan = score >= lifespanUpgradeCost;
+  const canUpgradeSize = score >= sizeUpgradeCost;
 
   const handleUpgradeLifespan = () => {
-    if (canUpgrade) {
-      setScore((prev) => prev - upgradeCost);
+    if (canUpgradeLifespan) {
+      setScore((prev) => prev - lifespanUpgradeCost);
       setBallLifespan((prev) => prev + 1000); // Add 1 second
-      setUpgradeCount((prev) => prev + 1);
+      setLifespanUpgrades((prev) => prev + 1);
+    }
+  };
+
+  const handleUpgradeSize = () => {
+    if (canUpgradeSize) {
+      setScore((prev) => prev - sizeUpgradeCost);
+      setBallSizeRange((prev) => ({
+        min: prev.min,
+        max: prev.max + 15, // Increase max size
+      }));
+      setSizeUpgrades((prev) => prev + 1);
     }
   };
 
   const handleResetGame = () => {
     setScore(0);
     setBallLifespan(3000);
-    setUpgradeCount(0);
+    setBallSizeRange({ min: 20, max: 50 });
+    setLifespanUpgrades(0);
+    setSizeUpgrades(0);
   };
 
   return (
@@ -38,17 +56,25 @@ const Index = () => {
 
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <GameZone onScoreUpdate={setScore} ballLifespan={ballLifespan} />
+            <GameZone
+              onScoreUpdate={setScore}
+              ballLifespan={ballLifespan}
+              ballSizeRange={ballSizeRange}
+            />
           </div>
 
           <div>
             <GameStats
               score={score}
               ballLifespan={ballLifespan}
+              ballSizeRange={ballSizeRange}
               onUpgradeLifespan={handleUpgradeLifespan}
+              onUpgradeSize={handleUpgradeSize}
               onResetGame={handleResetGame}
-              canUpgrade={canUpgrade}
-              upgradeCost={upgradeCost}
+              canUpgradeLifespan={canUpgradeLifespan}
+              canUpgradeSize={canUpgradeSize}
+              lifespanUpgradeCost={lifespanUpgradeCost}
+              sizeUpgradeCost={sizeUpgradeCost}
             />
           </div>
         </div>

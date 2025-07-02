@@ -13,9 +13,14 @@ interface Ball {
 interface GameZoneProps {
   onScoreUpdate: (score: number) => void;
   ballLifespan: number;
+  ballSizeRange: { min: number; max: number };
 }
 
-const GameZone = ({ onScoreUpdate, ballLifespan }: GameZoneProps) => {
+const GameZone = ({
+  onScoreUpdate,
+  ballLifespan,
+  ballSizeRange,
+}: GameZoneProps) => {
   const [balls, setBalls] = useState<Ball[]>([]);
   const [score, setScore] = useState(0);
 
@@ -40,7 +45,9 @@ const GameZone = ({ onScoreUpdate, ballLifespan }: GameZoneProps) => {
         id: Date.now().toString(),
         x,
         y,
-        size: Math.random() * 30 + 20,
+        size:
+          Math.random() * (ballSizeRange.max - ballSizeRange.min) +
+          ballSizeRange.min,
         color: colors[Math.floor(Math.random() * colors.length)],
         createdAt: Date.now(),
         lifespan: ballLifespan,
@@ -48,7 +55,7 @@ const GameZone = ({ onScoreUpdate, ballLifespan }: GameZoneProps) => {
 
       setBalls((prev) => [...prev, newBall]);
     },
-    [ballLifespan, colors],
+    [ballLifespan, ballSizeRange, colors],
   );
 
   // Calculate total area and award points

@@ -5,19 +5,27 @@ import Icon from "@/components/ui/icon";
 interface GameStatsProps {
   score: number;
   ballLifespan: number;
+  ballSizeRange: { min: number; max: number };
   onUpgradeLifespan: () => void;
+  onUpgradeSize: () => void;
   onResetGame: () => void;
-  canUpgrade: boolean;
-  upgradeCost: number;
+  canUpgradeLifespan: boolean;
+  canUpgradeSize: boolean;
+  lifespanUpgradeCost: number;
+  sizeUpgradeCost: number;
 }
 
 const GameStats = ({
   score,
   ballLifespan,
+  ballSizeRange,
   onUpgradeLifespan,
+  onUpgradeSize,
   onResetGame,
-  canUpgrade,
-  upgradeCost,
+  canUpgradeLifespan,
+  canUpgradeSize,
+  lifespanUpgradeCost,
+  sizeUpgradeCost,
 }: GameStatsProps) => {
   return (
     <Card className="p-6 bg-white border-slate-200">
@@ -42,6 +50,15 @@ const GameStats = ({
 
           <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
             <span className="text-sm font-medium text-slate-700">
+              Размер шариков:
+            </span>
+            <span className="font-mono text-blue-600">
+              {ballSizeRange.min.toFixed(0)}-{ballSizeRange.max.toFixed(0)}px
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+            <span className="text-sm font-medium text-slate-700">
               Скорость очков:
             </span>
             <span className="font-mono text-green-600">2 + площадь/500</span>
@@ -51,11 +68,20 @@ const GameStats = ({
         <div className="space-y-3">
           <Button
             onClick={onUpgradeLifespan}
-            disabled={!canUpgrade}
+            disabled={!canUpgradeLifespan}
             className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300"
           >
-            <Icon name="Plus" className="mr-2" size={16} />
-            Улучшить шарики ({upgradeCost} очков)
+            <Icon name="Clock" className="mr-2" size={16} />
+            Увеличить время ({lifespanUpgradeCost} очков)
+          </Button>
+
+          <Button
+            onClick={onUpgradeSize}
+            disabled={!canUpgradeSize}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300"
+          >
+            <Icon name="Maximize2" className="mr-2" size={16} />
+            Увеличить размер ({sizeUpgradeCost} очков)
           </Button>
 
           <Button
