@@ -44,7 +44,7 @@ const GameStats = ({
             <span className="text-sm font-medium text-slate-700">
               Скорость очков:
             </span>
-            <span className="font-mono text-green-600">+2/сек + площадь</span>
+            <span className="font-mono text-green-600">2 + площадь/500</span>
           </div>
         </div>
 

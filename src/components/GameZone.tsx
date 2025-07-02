@@ -61,15 +61,15 @@ const GameZone = ({ onScoreUpdate, ballLifespan }: GameZoneProps) => {
         prev.filter((ball) => now - ball.createdAt < ball.lifespan),
       );
 
-      // Calculate total area and award points
+      // Calculate total area and award points based on area
       const totalArea = balls.reduce((sum, ball) => {
         const radius = ball.size / 2;
         return sum + Math.PI * radius * radius;
       }, 0);
 
-      // Award 2 points per second plus area bonus
-      const areaBonus = Math.floor(totalArea / 1000);
-      const pointsToAdd = 2 + areaBonus;
+      // Points per second based on area: 2 base + area multiplier
+      const areaMultiplier = Math.floor(totalArea / 500); // More sensitive to area
+      const pointsToAdd = 2 + areaMultiplier;
 
       setScore((prev) => {
         const newScore = prev + pointsToAdd;
